@@ -1,10 +1,12 @@
 import React from "react";
-import {Arc, Circle, Layer, Line, Shape, Stage, Wedge} from "react-konva";
+import {Circle, Layer, Line, Stage} from "react-konva";
 import {calculateArcMirrorCoordinates} from "../../helpers/circleCalculator";
-import {CircleCoordinates, CircleDimensions} from "../../models/circle";
-import Konva from "konva";
-import Context = Konva.Context;
+import {CircleCoordinates, CircleDimensions, Quarter} from "../../models/circle";
 import ArcMirror from "../ArcMirror";
+import Diameter from "../Diameter";
+import {calculateMetricLines} from "../../helpers/metricLinesCalculator";
+import {MetricAlign} from "../../models/metric";
+import MetricLines from "../MetricLines";
 
 const radius = 300;
 const x = 500;
@@ -12,41 +14,64 @@ const y = 500;
 
 const circleDimensions: CircleDimensions = {
     diameter: 200,
-    width: 80,
-    upperHeight: 80,
+    width: 100,
+    upperHeight: 120,
     lowerHeight: 50
 }
 
 const CircleMirror = () => {
 
     const circleCoordinates: CircleCoordinates = {x, y, radius}
-    const acrMirrorCoordinates = calculateArcMirrorCoordinates(circleDimensions, circleCoordinates)
+    const scale = radius / (circleDimensions.diameter / 2);
+    const scaledCircleDimensions = {
+        diameter: circleDimensions.diameter * scale,
+        width: circleDimensions.width * scale,
+        upperHeight: circleDimensions.upperHeight * scale,
+        lowerHeight: circleDimensions.lowerHeight * scale
+    }
+    const acrMirrorCoordinates = calculateArcMirrorCoordinates(circleDimensions, circleCoordinates, Quarter.FIRST)
+    const fontSize = Math.round(radius / 10);
+    const font = `${fontSize}px sans-serif`
+    const diameterMetricsCoordinates = calculateMetricLines({
+        x: x - radius,
+        y: y - radius,
+        distance: 2 * radius,
+        length: 2 * radius,
+        text: "Діаметер",
+        fontSize,
+        font,
+        align: MetricAlign.VERTICAL
+    })
 
-    return <div>
-        <Stage width={window.innerWidth} height={window.innerHeight}>
-            <Layer>
-                <Circle x={x} y={y} radius={radius} stroke='black' strokeWidth={2} dash={[10]}/>
-                <ArcMirror
-                    circleCoordinates={circleCoordinates}
-                    arcMirrorCoordinates={acrMirrorCoordinates}
-                />
+    const widthMetricsCoordinates = calculateMetricLines({
+        x: acrMirrorCoordinates.x,
+        y: acrMirrorCoordinates.y2,
+        distance: scaledCircleDimensions.width,
+        length: scaledCircleDimensions.upperHeight,
+        text: "Ширина",
+        fontSize,
+        font,
+        align: MetricAlign.HORIZONTAL
+    })
 
-                {/*<Wedge
-                    x={acrMirrorCoordinates.upperX}
-                    y={acrMirrorCoordinates.upperY}
-                    scaleX={acrMirrorCoordinates.scaleX}
-                    scaleY={acrMirrorCoordinates.scaleY}
-                    radius={radius - 5}
-                    stroke="red"
-                    strokeWidth={2}
-                    angle={90}
-                    rotation={-90}
-                />*/}
-                {/*<Line points={[wedgeX, wedgeY, toWedgeXScaleY, toWedgeYScaleY]} stroke="black" strokeWidth={1}/>*/}
-                {/*<Line points={[wedgeX, wedgeY, toWedgeXScaleX, toWedgeYScaleX]} stroke="black" strokeWidth={1}/>*/}
-            </Layer>
-        </Stage>
-    </div>
+    return (
+        <div>
+            <Stage width={1920} height={1080}>
+                <Layer>
+                    <Circle x={x} y={y} radius={radius} stroke='black' strokeWidth={2} dash={[10]}/>
+                    <ArcMirror
+                        circleCoordinates={circleCoordinates}
+                        arcMirrorCoordinates={acrMirrorCoordinates}
+                    />
+                    {/*<Diameter circleCoordinates={circleCoordinates} />
+                    <Line points={[x, y, x - radius, y]} stroke="blue" strokeWidth={2} />*/}
+                    <MetricLines metricLinesInput={diameterMetricsCoordinates} />
+                    <MetricLines metricLinesInput={widthMetricsCoordinates} />
+                </Layer>
+
+            </Stage>
+        </div>
+    )
 }
 
 export default CircleMirror;

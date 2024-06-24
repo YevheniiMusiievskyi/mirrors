@@ -1,3 +1,5 @@
+import {Interface} from "readline";
+
 export interface CircleDimensions {
     diameter: number;
     width: number;
@@ -18,4 +20,17 @@ export interface ArcMirrorCoordinates {
     y2: number;
     startAngle: number;
     endAngle: number;
+    clockwise: boolean;
+}
+
+export interface CanvasTextMetrics {
+    width: number;
+    height: number;
+}
+
+export enum Quarter {
+    FIRST,
+    SECOND,
+    THIRD,
+    FOURTH
 }
