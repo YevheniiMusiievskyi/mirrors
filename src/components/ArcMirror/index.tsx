@@ -1,7 +1,4 @@
 import {Shape} from "react-konva";
-import Konva from "konva";
-import Context = Konva.Context;
-import SceneFuncShape = Konva.Shape
 import React from "react";
 import {ArcMirrorCoordinates, CircleCoordinates} from "../../models/circle";
 
@@ -12,6 +9,8 @@ interface ArcMirrorProps {
 
 const ArcMirror: React.FC<ArcMirrorProps> = ({ circleCoordinates, arcMirrorCoordinates  }) => {
     const { x, y, x2, y2, startAngle, endAngle, clockwise} = arcMirrorCoordinates;
+
+    
 
     return <Shape
         stroke="red"

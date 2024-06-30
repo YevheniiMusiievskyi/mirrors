@@ -1,16 +1,17 @@
 import React from "react";
-import {Circle, Layer, Line, Stage} from "react-konva";
-import {calculateArcMirrorCoordinates} from "../../helpers/circleCalculator";
+import {Circle, Layer, Stage} from "react-konva";
+import {calculateArcMirrorCoordinates, scaleCircleDimensions} from "../../helpers/circleCalculator";
 import {CircleCoordinates, CircleDimensions, Quarter} from "../../models/circle";
 import ArcMirror from "../ArcMirror";
-import Diameter from "../Diameter";
 import {calculateMetricLines} from "../../helpers/metricLinesCalculator";
-import {MetricAlign} from "../../models/metric";
+import {ArrowPosition, MetricDirection} from "../../models/metric";
 import MetricLines from "../MetricLines";
 
 const radius = 300;
 const x = 500;
 const y = 500;
+
+const circleCoordinates: CircleCoordinates = {x, y, radius}
 
 const circleDimensions: CircleDimensions = {
     diameter: 200,
@@ -21,17 +22,11 @@ const circleDimensions: CircleDimensions = {
 
 const CircleMirror = () => {
 
-    const circleCoordinates: CircleCoordinates = {x, y, radius}
-    const scale = radius / (circleDimensions.diameter / 2);
-    const scaledCircleDimensions = {
-        diameter: circleDimensions.diameter * scale,
-        width: circleDimensions.width * scale,
-        upperHeight: circleDimensions.upperHeight * scale,
-        lowerHeight: circleDimensions.lowerHeight * scale
-    }
-    const acrMirrorCoordinates = calculateArcMirrorCoordinates(circleDimensions, circleCoordinates, Quarter.FIRST)
+    const scaledCircleDimensions = scaleCircleDimensions(circleDimensions, circleCoordinates);
+    const acrMirrorCoordinates = calculateArcMirrorCoordinates(scaledCircleDimensions, circleCoordinates, Quarter.FIRST)
     const fontSize = Math.round(radius / 10);
     const font = `${fontSize}px sans-serif`
+
     const diameterMetricsCoordinates = calculateMetricLines({
         x: x - radius,
         y: y - radius,
@@ -40,7 +35,8 @@ const CircleMirror = () => {
         text: "Діаметер",
         fontSize,
         font,
-        align: MetricAlign.VERTICAL
+        align: MetricDirection.VERTICAL,
+        arrowPosition: ArrowPosition.LEFT
     })
 
     const widthMetricsCoordinates = calculateMetricLines({
@@ -51,7 +47,7 @@ const CircleMirror = () => {
         text: "Ширина",
         fontSize,
         font,
-        align: MetricAlign.HORIZONTAL
+        align: MetricDirection.HORIZONTAL,
     })
 
     return (
@@ -65,8 +61,8 @@ const CircleMirror = () => {
                     />
                     {/*<Diameter circleCoordinates={circleCoordinates} />
                     <Line points={[x, y, x - radius, y]} stroke="blue" strokeWidth={2} />*/}
-                    <MetricLines metricLinesInput={diameterMetricsCoordinates} />
-                    <MetricLines metricLinesInput={widthMetricsCoordinates} />
+                    <MetricLines metricLinesInput={diameterMetricsCoordinates}/>
+                    <MetricLines metricLinesInput={widthMetricsCoordinates}/>
                 </Layer>
 
             </Stage>

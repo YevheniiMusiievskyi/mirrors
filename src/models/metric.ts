@@ -6,7 +6,8 @@ export interface MetricLinesInput {
     text: string;
     fontSize: number;
     font: string;
-    align: MetricAlign;
+    align: MetricDirection;
+    arrowPosition?: ArrowPosition
 }
 
 export interface MetricLinesCoordinates {
@@ -23,10 +24,17 @@ export interface MetricLinesCoordinates {
     textX: number;
     textY: number;
     textRotation: number;
-    align: MetricAlign;
+    direction: MetricDirection;
 }
 
-export enum MetricAlign {
+export enum MetricDirection {
     VERTICAL,
     HORIZONTAL
+}
+
+export enum ArrowPosition {
+    LEFT,
+    RIGHT,
+    UP,
+    DOWN
 }

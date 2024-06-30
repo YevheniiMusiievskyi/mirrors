@@ -14,11 +14,19 @@ const quarterCoefficients = new Map<Quarter, Coefficients>()
     .set(Quarter.THIRD, { xCoeff: -1, yCoeff: 1, clockwise: true })
     .set(Quarter.FOURTH, { xCoeff: 1, yCoeff: 1, clockwise: false})
 
+export function scaleCircleDimensions(circleDimensions: CircleDimensions, circle: CircleCoordinates): CircleDimensions {
+    const scale = circle.radius / (circleDimensions.diameter / 2);
+    return {
+        diameter: circleDimensions.diameter * scale,
+        width: circleDimensions.width * scale,
+        upperHeight: circleDimensions.upperHeight * scale,
+        lowerHeight: circleDimensions.lowerHeight * scale
+    }
+}
+
 export function calculateArcMirrorCoordinates(circleDimensions: CircleDimensions, coordinates: CircleCoordinates, quarter: Quarter): ArcMirrorCoordinates {
-    const scale = coordinates.radius / (circleDimensions.diameter / 2);
     const radius = coordinates.radius;
-    const width = circleDimensions.width * scale;
-    const upperHeight = circleDimensions.upperHeight * scale;
+    const { width, upperHeight } = circleDimensions
 
     const coefficients = quarterCoefficients.get(quarter);
     if (!coefficients) {
@@ -41,6 +49,7 @@ export function calculateArcMirrorCoordinates(circleDimensions: CircleDimensions
         y2,
         startAngle,
         endAngle,
-        clockwise: coefficients.clockwise
+        clockwise: coefficients.clockwise,
+        quarter
     }
 }

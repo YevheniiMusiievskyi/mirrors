@@ -21,6 +21,7 @@ export interface ArcMirrorCoordinates {
     startAngle: number;
     endAngle: number;
     clockwise: boolean;
+    quarter: Quarter;
 }
 
 export interface CanvasTextMetrics {

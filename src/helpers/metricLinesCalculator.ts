@@ -1,8 +1,8 @@
-import {MetricAlign, MetricLinesCoordinates, MetricLinesInput} from "../models/metric";
+import {ArrowPosition, MetricDirection, MetricLinesCoordinates, MetricLinesInput} from "../models/metric";
 import {CanvasTextMetrics} from "../models/circle";
 
 export function calculateMetricLines(metricsInput: MetricLinesInput): MetricLinesCoordinates {
-    return metricsInput.align === MetricAlign.VERTICAL
+    return metricsInput.align === MetricDirection.VERTICAL
         ? calculateVerticalAlignLines(metricsInput)
         : calculateHorizontalAlignLines(metricsInput);
 }
@@ -11,14 +11,14 @@ function calculateVerticalAlignLines(metricsInput: MetricLinesInput): MetricLine
     const width = metricsInput.distance;
     const height = metricsInput.length;
 
-    const x1 = metricsInput.x;
-    const x2 = x1 + width;
+    const x1 = metricsInput.x * 0.95;
+    const x2 = metricsInput.x + width;
     const y1 = metricsInput.y;
     const y2 = y1 + height;
 
-    const arrowX1 = x1;
+    const arrowX1 = metricsInput.arrowPosition === ArrowPosition.RIGHT ? x2 : x1;
     const arrowY1 = y1;
-    const arrowX2 = x1;
+    const arrowX2 = arrowX1;
     const arrowY2 = y2;
 
     const textMetrics = measureText(metricsInput.text, metricsInput.font);
@@ -41,7 +41,7 @@ function calculateVerticalAlignLines(metricsInput: MetricLinesInput): MetricLine
         textX,
         textY,
         textRotation,
-        align: MetricAlign.VERTICAL
+        direction: MetricDirection.VERTICAL
     }
 }
 
@@ -51,13 +51,13 @@ function calculateHorizontalAlignLines(metricsInput: MetricLinesInput): MetricLi
 
     const x1 = metricsInput.x;
     const x2 = x1 + width;
-    const y1 = metricsInput.y;
-    const y2 = y1 + height;
+    const y1 = metricsInput.y * 0.95;
+    const y2 = metricsInput.y + height;
 
     const arrowX1 = x1;
-    const arrowY1 = y1;
+    const arrowY1 = metricsInput.arrowPosition === ArrowPosition.DOWN ? y2 : y1;
     const arrowX2 = x2;
-    const arrowY2 = y1;
+    const arrowY2 = arrowY1;
 
     const textMetrics = measureText(metricsInput.text, metricsInput.font);
     const textX = (arrowX1 + arrowX2) / 2 - textMetrics.width / 2;
@@ -78,7 +78,7 @@ function calculateHorizontalAlignLines(metricsInput: MetricLinesInput): MetricLi
         textX,
         textY,
         textRotation,
-        align: MetricAlign.VERTICAL
+        direction: MetricDirection.HORIZONTAL
     }
 }
 

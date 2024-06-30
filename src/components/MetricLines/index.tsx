@@ -1,4 +1,4 @@
-import {MetricAlign, MetricLinesCoordinates} from "../../models/metric";
+import {MetricDirection, MetricLinesCoordinates} from "../../models/metric";
 import {Arrow, Line, Text} from "react-konva";
 import React from "react";
 
@@ -14,7 +14,7 @@ const MetricLines: React.FC<MetricLinesProps> = ({metricLinesInput}) => {
     return (
         <>
             {
-                metricLinesInput.align === MetricAlign.VERTICAL
+                metricLinesInput.direction === MetricDirection.VERTICAL
                     ? (
                         <>
                             <Line points={[x1, y1, x2, y1]} strokeWidth={strokeWidth} stroke={stroke}/>
@@ -33,8 +33,8 @@ const MetricLines: React.FC<MetricLinesProps> = ({metricLinesInput}) => {
                 pointerAtBeginning={true}
                 pointerAtEnding={true}
                 strokeWidth={strokeWidth}
-                stroke="black"
-                fill="black"
+                stroke={stroke}
+                fill={stroke}
             />
             <Text x={metricLinesInput.textX} y={metricLinesInput.textY} fontSize={metricLinesInput.fontSize}
                   text={metricLinesInput.text} rotation={metricLinesInput.textRotation}/>
