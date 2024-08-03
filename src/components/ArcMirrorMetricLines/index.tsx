@@ -1,6 +1,6 @@
 import React from "react";
-import {ArcMirrorCoordinates, CircleCoordinates, CircleDimensions} from "../../models/circle";
-import {calculateMetricLines} from "../../helpers/metricLinesCalculator";
+import {ArcMirrorCoordinates, CircleCoordinates, CircleDimensions, Quarter} from "../../models/circle";
+import {calculateHorizontalAlignLines, calculateVerticalAlignLines} from "../../helpers/metricLinesCalculator";
 import {ArrowPosition, MetricDirection} from "../../models/metric";
 import MetricLines from "../MetricLines";
 
@@ -12,49 +12,118 @@ export interface IArcMirrorMetricLines {
     fontSize: number;
 }
 
+interface VerticalQuarterSpecificCoordinates {
+    arrowPosition: ArrowPosition;
+}
+
+interface HorizontalQuarterSpecificCoordinates {
+    arrowPosition: ArrowPosition;
+}
+
+interface OuterWidthQuarterSpecificCoordinates {
+    x2: number;
+    arrowPosition: ArrowPosition;
+}
+
+interface OuterHeightQuarterSpecificCoordinates {
+    y1: number;
+    toX: number;
+    arrowPosition: ArrowPosition;
+}
+
+
+interface QuarterSpecificCoordinates {
+    outerWidth: OuterWidthQuarterSpecificCoordinates,
+    innerWidth: HorizontalQuarterSpecificCoordinates
+    outerHeight: OuterHeightQuarterSpecificCoordinates,
+    innerHeight: VerticalQuarterSpecificCoordinates,
+}
+
+const getQuarterSpecificCoordinates = (quarter: Quarter, circleCoordinates: CircleCoordinates): QuarterSpecificCoordinates => {
+    const upperQuarter = quarter === Quarter.FIRST || quarter === Quarter.SECOND
+    const rightQuarter = quarter === Quarter.FIRST || quarter === Quarter.FOURTH
+    const {x, y, radius} = circleCoordinates
+    return {
+        outerWidth: {
+            x2: rightQuarter ? x + radius : x - radius,
+            arrowPosition: upperQuarter ? ArrowPosition.UP : ArrowPosition.DOWN
+        },
+        innerWidth: {
+            arrowPosition: upperQuarter ? ArrowPosition.DOWN : ArrowPosition.UP
+        },
+        outerHeight: {
+            y1: upperQuarter ? x - radius : x + radius,
+            toX: rightQuarter ? x + radius : x - radius,
+            arrowPosition: rightQuarter ? ArrowPosition.RIGHT : ArrowPosition.LEFT
+        },
+        innerHeight: {
+            arrowPosition: rightQuarter ? ArrowPosition.LEFT : ArrowPosition.RIGHT
+        }
+    }
+}
+
 const ArcMirrorMetricLines: React.FC<IArcMirrorMetricLines> = ({ circleCoordinates, circleDimensions, arcMirrorCoordinates, font, fontSize }) => {
-    const {y, radius} = circleCoordinates
+    const {x, y, radius} = circleCoordinates
 
-    const outerHeight = calculateMetricLines({
-        x1: circleCoordinates.x,
-        y1: y - radius,
-        distance: Math.max(circleDimensions.width, radius),
-        length: circleDimensions.upperHeight,
-        text: "Висота зверху",
-        fontSize,
-        font,
-        align: MetricDirection.VERTICAL,
-        arrowPosition: ArrowPosition.RIGHT
-    })
+    const quarterSpecificCoordinates = getQuarterSpecificCoordinates(arcMirrorCoordinates.quarter, circleCoordinates)
 
-    const innerHeight = calculateMetricLines({
+    const outerWidth = calculateHorizontalAlignLines({
         x1: arcMirrorCoordinates.x,
         y1: arcMirrorCoordinates.y2,
-        distance: Math.min(circleDimensions.width, radius),
-        length: Math.abs(arcMirrorCoordinates.y - arcMirrorCoordinates.y2),
-        text: "D",
+        x2: quarterSpecificCoordinates.outerWidth.x2,
+        y2: y,
+        toY: arcMirrorCoordinates.y2,
+        text: "Ширина",
         fontSize,
         font,
-        align: MetricDirection.VERTICAL,
-        arrowPosition: ArrowPosition.LEFT
+        align: MetricDirection.HORIZONTAL,
+        arrowPosition: quarterSpecificCoordinates.outerWidth.arrowPosition
     })
 
-    const innerWidth = calculateMetricLines({
+    const innerWidth = calculateHorizontalAlignLines({
         x1: arcMirrorCoordinates.x,
-        y1: arcMirrorCoordinates.y2,
-        distance: circleDimensions.width,
-        length: circleDimensions.upperHeight,
+        y1: arcMirrorCoordinates.y,
+        x2: arcMirrorCoordinates.x2,
+        y2: arcMirrorCoordinates.y,
+        toY: arcMirrorCoordinates.y,
         text: "C",
         fontSize,
         font,
         align: MetricDirection.HORIZONTAL,
-        arrowPosition: ArrowPosition.DOWN
+        arrowPosition: quarterSpecificCoordinates.innerWidth.arrowPosition
+    })
+
+    const outerHeight = calculateVerticalAlignLines({
+        x1: circleCoordinates.x,
+        y1: quarterSpecificCoordinates.outerHeight.y1,
+        x2: arcMirrorCoordinates.x2,
+        y2: arcMirrorCoordinates.y,
+        toX: quarterSpecificCoordinates.outerHeight.toX,
+        text: "Висота зверху",
+        fontSize,
+        font,
+        align: MetricDirection.VERTICAL,
+        arrowPosition: quarterSpecificCoordinates.outerHeight.arrowPosition
+    })
+
+    const innerHeight = calculateVerticalAlignLines({
+        x1: arcMirrorCoordinates.x,
+        y1: arcMirrorCoordinates.y,
+        x2: arcMirrorCoordinates.x,
+        y2: arcMirrorCoordinates.y2,
+        toX: arcMirrorCoordinates.x,
+        text: "D",
+        fontSize,
+        font,
+        align: MetricDirection.VERTICAL,
+        arrowPosition: quarterSpecificCoordinates.innerHeight.arrowPosition
     })
 
     return <>
+        <MetricLines metricLinesInput={outerWidth}/>
+        <MetricLines metricLinesInput={innerWidth} />
         <MetricLines metricLinesInput={outerHeight} />
         <MetricLines metricLinesInput={innerHeight} />
-        <MetricLines metricLinesInput={innerWidth} />
     </>
 }
 

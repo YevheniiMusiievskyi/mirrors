@@ -11,25 +11,29 @@ const stroke = "black"
 
 const MetricLines: React.FC<MetricLinesProps> = ({metricLinesInput}) => {
     const {x1, y1, x2, y2} = metricLinesInput
+    const {arrowX1, arrowY1, arrowX2, arrowY2} = metricLinesInput.arrow
+    const toX = metricLinesInput.toX ? metricLinesInput.toX : -1;
+    const toY = metricLinesInput.toY ? metricLinesInput.toY : -1;
+
     return (
         <>
             {
                 metricLinesInput.direction === MetricDirection.VERTICAL
                     ? (
                         <>
-                            <Line points={[x1, y1, x2, y1]} strokeWidth={strokeWidth} stroke={stroke}/>
-                            <Line points={[x1, y2, x2, y2]} strokeWidth={strokeWidth} stroke={stroke}/>
+                            <Line points={[x1, y1, toX, y1]} strokeWidth={strokeWidth} stroke={stroke}/>
+                            <Line points={[x2, y2, toX, y2]} strokeWidth={strokeWidth} stroke={stroke}/>
                         </>
                     )
                     : (
                         <>
-                            <Line points={[x1, y1, x1, y2]} strokeWidth={strokeWidth} stroke={stroke}/>
-                            <Line points={[x2, y1, x2, y2]} strokeWidth={strokeWidth} stroke={stroke}/>
+                            <Line points={[x1, y1, x1, toY]} strokeWidth={strokeWidth} stroke={stroke}/>
+                            <Line points={[x2, y2, x2, toY]} strokeWidth={strokeWidth} stroke={stroke}/>
                         </>
                     )
             }
             <Arrow
-                points={[metricLinesInput.arrowX1, metricLinesInput.arrowY1, metricLinesInput.arrowX2, metricLinesInput.arrowY2]}
+                points={[arrowX1, arrowY1, arrowX2, arrowY2]}
                 pointerAtBeginning={true}
                 pointerAtEnding={true}
                 strokeWidth={strokeWidth}

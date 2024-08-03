@@ -1,6 +1,6 @@
-import {Shape} from "react-konva";
+import {Shape, Text} from "react-konva";
 import React from "react";
-import {ArcMirrorCoordinates, CircleCoordinates, CircleDimensions, Quarter} from "../../models/circle";
+import {CircleCoordinates, CircleDimensions, Quarter} from "../../models/circle";
 import ArcMirrorMetricLines from "../ArcMirrorMetricLines";
 import {calculateArcMirrorCoordinates} from "../../helpers/circleCalculator";
 
@@ -38,6 +38,10 @@ const ArcMirror: React.FC<ArcMirrorProps> = ({circleCoordinates, circleDimension
             font={font}
             fontSize={fontSize}
         />
+        {/*<Text x={x} y={y} fontSize={fontSize} text="X Y"/>
+        <Text x={x} y={y2} fontSize={fontSize} text="X Y2"/>
+        <Text x={x2} y={y} fontSize={fontSize} text="X2 Y"/>
+        <Text x={x2} y={y2} fontSize={fontSize} text="X2 Y2"/>*/}
     </>
 
 }
