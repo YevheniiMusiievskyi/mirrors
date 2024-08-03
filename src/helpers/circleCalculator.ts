@@ -24,7 +24,7 @@ export function scaleCircleDimensions(circleDimensions: CircleDimensions, circle
     }
 }
 
-export function calculateArcMirrorCoordinates(circleDimensions: CircleDimensions, coordinates: CircleCoordinates, quarter: Quarter): ArcMirrorCoordinates {
+export function calculateArcMirrorCoordinates(coordinates: CircleCoordinates, circleDimensions: CircleDimensions, quarter: Quarter): ArcMirrorCoordinates {
     const radius = coordinates.radius;
     const { width, upperHeight } = circleDimensions
 

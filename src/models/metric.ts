@@ -1,8 +1,10 @@
 export interface MetricLinesInput {
-    x: number;
-    y: number;
+    x1: number;
+    y1: number;
     distance: number;
     length: number;
+    x2?: number;
+    y2?: number;
     text: string;
     fontSize: number;
     font: string;

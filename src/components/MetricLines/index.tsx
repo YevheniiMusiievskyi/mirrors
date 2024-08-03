@@ -6,7 +6,7 @@ interface MetricLinesProps {
     metricLinesInput: MetricLinesCoordinates
 }
 
-const strokeWidth = 1;
+const strokeWidth = 0.5;
 const stroke = "black"
 
 const MetricLines: React.FC<MetricLinesProps> = ({metricLinesInput}) => {

@@ -8,15 +8,18 @@ export function calculateMetricLines(metricsInput: MetricLinesInput): MetricLine
 }
 
 function calculateVerticalAlignLines(metricsInput: MetricLinesInput): MetricLinesCoordinates {
-    const width = metricsInput.distance;
-    const height = metricsInput.length;
+    const x = metricsInput.x1;
+    const y = metricsInput.y1;
+    const width = metricsInput.x2 ?  Math.abs(metricsInput.x1 - metricsInput.x2) : metricsInput.distance;
+    const height = metricsInput.y2 ? Math.abs(metricsInput.y1 - metricsInput.y2) : metricsInput.length;
+    const isRight = metricsInput.arrowPosition === ArrowPosition.RIGHT
 
-    const x1 = metricsInput.x * 0.95;
-    const x2 = metricsInput.x + width;
-    const y1 = metricsInput.y;
+    const x1 = (isRight ? x : x * 0.9);
+    const x2 = (isRight ? x * 1.1 : x) + width;
+    const y1 = y;
     const y2 = y1 + height;
 
-    const arrowX1 = metricsInput.arrowPosition === ArrowPosition.RIGHT ? x2 : x1;
+    const arrowX1 = isRight ? x2 : x1;
     const arrowY1 = y1;
     const arrowX2 = arrowX1;
     const arrowY2 = y2;
@@ -46,13 +49,16 @@ function calculateVerticalAlignLines(metricsInput: MetricLinesInput): MetricLine
 }
 
 function calculateHorizontalAlignLines(metricsInput: MetricLinesInput): MetricLinesCoordinates {
+    const x = metricsInput.x1;
+    const y = metricsInput.y1;
     const width = metricsInput.distance;
     const height = metricsInput.length;
+    const isUp = metricsInput.arrowPosition === ArrowPosition.UP;
 
-    const x1 = metricsInput.x;
+    const x1 = x;
     const x2 = x1 + width;
-    const y1 = metricsInput.y * 0.95;
-    const y2 = metricsInput.y + height;
+    const y1 = isUp ? y * 0.9 : y;
+    const y2 = (isUp ? y : y * 1.1) + height;
 
     const arrowX1 = x1;
     const arrowY1 = metricsInput.arrowPosition === ArrowPosition.DOWN ? y2 : y1;
