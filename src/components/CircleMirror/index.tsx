@@ -1,8 +1,8 @@
 import React from "react";
 import {Circle, Layer, Stage} from "react-konva";
-import {calculateArcMirrorCoordinates, scaleCircleDimensions} from "../../helpers/circleCalculator";
+import {scaleCircleDimensions} from "../../helpers/circleCalculator";
 import {CircleCoordinates, CircleDimensions, Quarter} from "../../models/circle";
-import {calculateHorizontalAlignLines, calculateVerticalAlignLines} from "../../helpers/metricLinesCalculator";
+import {calculateVerticalAlignLines} from "../../helpers/metricLinesCalculator";
 import {ArrowPosition, MetricDirection} from "../../models/metric";
 import MetricLines from "../MetricLines";
 import ArcMirror from "../ArcMirror";
@@ -32,7 +32,6 @@ const CircleMirror = () => {
         x2: x,
         y2: y + radius,
         toX: x - radius,
-        text: "Діаметер",
         fontSize,
         font,
         align: MetricDirection.VERTICAL,

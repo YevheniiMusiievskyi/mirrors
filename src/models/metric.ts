@@ -3,7 +3,6 @@ export interface MetricLinesInput {
     y1: number;
     x2: number;
     y2: number;
-    text: string;
     fontSize: number;
     font: string;
     align: MetricDirection;
