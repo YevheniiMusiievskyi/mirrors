@@ -28,7 +28,7 @@ export function calculateVerticalAlignLines(metricsInput: VerticalMetricLinesInp
     const arrowX2 = arrowX1;
     const arrowY2 = y2;
 
-    const text = getLength(y1, y2).toString()
+    const text = getLength(y1, y2, metricsInput.scale).toString()
     const textMetrics = measureText(text, metricsInput.font);
 
     const textX = (arrowX1 + arrowX2) / 2 - textMetrics.height;
@@ -71,7 +71,7 @@ export function calculateHorizontalAlignLines(metricsInput: HorizontalMetricLine
     const arrowX2 = x2;
     const arrowY2 = arrowY1;
 
-    const text = getLength(x1, x2).toString()
+    const text = getLength(x1, x2, metricsInput.scale).toString()
     const textMetrics = measureText(text, metricsInput.font);
     const textX = (arrowX1 + arrowX2) / 2 - textMetrics.width / 2;
     const textY = (arrowY1 + arrowY2) / 2 - textMetrics.height;
@@ -98,8 +98,8 @@ export function calculateHorizontalAlignLines(metricsInput: HorizontalMetricLine
     }
 }
 
-function getLength(a1: number, a2: number): number {
-    return Math.round(Math.abs(a1 - a2) * 100) / 100
+function getLength(a1: number, a2: number, scale: number): number {
+    return Math.round(Math.abs(a1 - a2) / scale * 100) / 100
 }
 
 

@@ -1,4 +1,11 @@
-import {ArcMirrorCoordinates, CanvasTextMetrics, CircleCoordinates, CircleDimensions, Quarter} from "../models/circle";
+import {
+    ArcMirrorCoordinates,
+    ArcMirrorInput,
+    CanvasTextMetrics,
+    CircleCoordinates,
+    CircleDimensions,
+    Quarter
+} from "../models/circle";
 
 type Coefficient = -1 | 1;
 
@@ -14,19 +21,19 @@ const quarterCoefficients = new Map<Quarter, Coefficients>()
     .set(Quarter.THIRD, { xCoeff: -1, yCoeff: 1, clockwise: true })
     .set(Quarter.FOURTH, { xCoeff: 1, yCoeff: 1, clockwise: false})
 
-export function scaleCircleDimensions(circleDimensions: CircleDimensions, circle: CircleCoordinates): CircleDimensions {
-    const scale = circle.radius / (circleDimensions.diameter / 2);
+export function scaleCircleDimensions(circleDimensions: CircleDimensions, scale: number): CircleDimensions {
     return {
+        cutSide: circleDimensions.cutSide,
         diameter: circleDimensions.diameter * scale,
         width: circleDimensions.width * scale,
-        upperHeight: circleDimensions.upperHeight * scale,
-        lowerHeight: circleDimensions.lowerHeight * scale
+        upperHeight: circleDimensions.upperHeight ? circleDimensions.upperHeight * scale : undefined,
+        lowerHeight: circleDimensions.lowerHeight ? circleDimensions.lowerHeight * scale : undefined
     }
 }
 
-export function calculateArcMirrorCoordinates(coordinates: CircleCoordinates, circleDimensions: CircleDimensions, quarter: Quarter): ArcMirrorCoordinates {
+export function calculateArcMirrorCoordinates(coordinates: CircleCoordinates, arcMirror: ArcMirrorInput, quarter: Quarter): ArcMirrorCoordinates {
     const radius = coordinates.radius;
-    const { width, upperHeight } = circleDimensions
+    const { width, height } = arcMirror
 
     const coefficients = quarterCoefficients.get(quarter);
     if (!coefficients) {
@@ -34,7 +41,7 @@ export function calculateArcMirrorCoordinates(coordinates: CircleCoordinates, ci
     }
 
     const x = coordinates.x + coefficients.xCoeff * (radius - width);
-    const y = coordinates.y + coefficients.yCoeff * (radius - upperHeight);
+    const y = coordinates.y + coefficients.yCoeff * (radius - height);
 
     const x2 = coefficients.xCoeff * Math.sqrt(Math.pow(radius, 2) - Math.pow(y - coordinates.y, 2)) + coordinates.x
     const y2 = coefficients.yCoeff * Math.sqrt(Math.pow(radius, 2) - Math.pow(x - coordinates.x, 2)) + coordinates.y
@@ -50,6 +57,7 @@ export function calculateArcMirrorCoordinates(coordinates: CircleCoordinates, ci
         startAngle,
         endAngle,
         clockwise: coefficients.clockwise,
-        quarter
+        quarter,
+        scale: arcMirror.scale
     }
 }

@@ -6,7 +6,8 @@ export interface MetricLinesInput {
     fontSize: number;
     font: string;
     align: MetricDirection;
-    arrowPosition?: ArrowPosition
+    arrowPosition?: ArrowPosition;
+    scale: number;
 }
 
 export interface VerticalMetricLinesInput extends MetricLinesInput {

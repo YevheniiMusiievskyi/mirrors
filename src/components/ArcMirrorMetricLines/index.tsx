@@ -6,7 +6,6 @@ import MetricLines from "../MetricLines";
 
 export interface IArcMirrorMetricLines {
     circleCoordinates: CircleCoordinates;
-    circleDimensions: CircleDimensions;
     arcMirrorCoordinates: ArcMirrorCoordinates;
     font: string;
     fontSize: number;
@@ -62,7 +61,7 @@ const getQuarterSpecificCoordinates = (quarter: Quarter, circleCoordinates: Circ
     }
 }
 
-const ArcMirrorMetricLines: React.FC<IArcMirrorMetricLines> = ({ circleCoordinates, circleDimensions, arcMirrorCoordinates, font, fontSize }) => {
+const ArcMirrorMetricLines: React.FC<IArcMirrorMetricLines> = ({ circleCoordinates, arcMirrorCoordinates, font, fontSize }) => {
     const {x, y, radius} = circleCoordinates
 
     const quarterSpecificCoordinates = getQuarterSpecificCoordinates(arcMirrorCoordinates.quarter, circleCoordinates)
@@ -76,7 +75,8 @@ const ArcMirrorMetricLines: React.FC<IArcMirrorMetricLines> = ({ circleCoordinat
         fontSize,
         font,
         align: MetricDirection.HORIZONTAL,
-        arrowPosition: quarterSpecificCoordinates.outerWidth.arrowPosition
+        arrowPosition: quarterSpecificCoordinates.outerWidth.arrowPosition,
+        scale: arcMirrorCoordinates.scale
     })
 
     const innerWidth = calculateHorizontalAlignLines({
@@ -88,7 +88,8 @@ const ArcMirrorMetricLines: React.FC<IArcMirrorMetricLines> = ({ circleCoordinat
         fontSize,
         font,
         align: MetricDirection.HORIZONTAL,
-        arrowPosition: quarterSpecificCoordinates.innerWidth.arrowPosition
+        arrowPosition: quarterSpecificCoordinates.innerWidth.arrowPosition,
+        scale: arcMirrorCoordinates.scale
     })
 
     const outerHeight = calculateVerticalAlignLines({
@@ -100,7 +101,8 @@ const ArcMirrorMetricLines: React.FC<IArcMirrorMetricLines> = ({ circleCoordinat
         fontSize,
         font,
         align: MetricDirection.VERTICAL,
-        arrowPosition: quarterSpecificCoordinates.outerHeight.arrowPosition
+        arrowPosition: quarterSpecificCoordinates.outerHeight.arrowPosition,
+        scale: arcMirrorCoordinates.scale
     })
 
     const innerHeight = calculateVerticalAlignLines({
@@ -112,7 +114,8 @@ const ArcMirrorMetricLines: React.FC<IArcMirrorMetricLines> = ({ circleCoordinat
         fontSize,
         font,
         align: MetricDirection.VERTICAL,
-        arrowPosition: quarterSpecificCoordinates.innerHeight.arrowPosition
+        arrowPosition: quarterSpecificCoordinates.innerHeight.arrowPosition,
+        scale: arcMirrorCoordinates.scale
     })
 
     return <>
