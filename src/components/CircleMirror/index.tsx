@@ -3,7 +3,6 @@ import {Circle, Layer, Stage} from "react-konva";
 import {calculateArcMirrorCoordinates, scaleCircleDimensions} from "../../helpers/circleCalculator";
 import {
     ArcMirrorCoordinates,
-    ArcMirrorSide,
     CircleCoordinates,
     CircleDimensions,
     CutSide,
@@ -42,10 +41,10 @@ const CircleMirror: React.FC<CircleMirrorProps> = ({
     const fontSize = Math.round(radius / 15);
     const font = `${fontSize}px sans-serif`
     const scaledCircleDimensions = scaleCircleDimensions(circleDimensions, scale)
-    const isRight = circleDimensions.cutSide === CutSide.RIGHT;
+    const isLeft = circleDimensions.cutSide === CutSide.LEFT;
     let upperArcMirrorCoordinates: ArcMirrorCoordinates | null = null;
     if (scaledCircleDimensions.upperHeight) {
-        const upperArcQuarter = isRight ? Quarter.FIRST : Quarter.SECOND;
+        const upperArcQuarter = isLeft ? Quarter.FIRST : Quarter.SECOND;
         upperArcMirrorCoordinates = calculateArcMirrorCoordinates(circleCoordinates, {
             ...scaledCircleDimensions,
             height: scaledCircleDimensions.upperHeight,
@@ -55,7 +54,7 @@ const CircleMirror: React.FC<CircleMirrorProps> = ({
 
     let lowerArcMirrorCoordinates: ArcMirrorCoordinates | null = null;
     if (scaledCircleDimensions.lowerHeight) {
-        const lowerArcQuarter = isRight ? Quarter.FOURTH : Quarter.THIRD;
+        const lowerArcQuarter = isLeft ? Quarter.FOURTH : Quarter.THIRD;
         lowerArcMirrorCoordinates = calculateArcMirrorCoordinates(circleCoordinates, {
             ...scaledCircleDimensions,
             height: scaledCircleDimensions.lowerHeight,
@@ -73,11 +72,11 @@ const CircleMirror: React.FC<CircleMirrorProps> = ({
             y1: upperArcMirrorCoordinates.y,
             x2: x2,
             y2: lowerArcMirrorCoordinates.y,
-            toX: isRight ? Math.max(x1, x2) : Math.min(x1, x2),
+            toX: isLeft ? Math.max(x1, x2) : Math.min(x1, x2),
             fontSize,
             font,
             align: MetricDirection.VERTICAL,
-            arrowPosition: isRight ? ArrowPosition.RIGHT : ArrowPosition.LEFT,
+            arrowPosition: isLeft ? ArrowPosition.RIGHT : ArrowPosition.LEFT,
             scale
         })
     }
@@ -87,11 +86,11 @@ const CircleMirror: React.FC<CircleMirrorProps> = ({
         y1: y - radius,
         x2: x,
         y2: y + radius,
-        toX: isRight ? x - radius : x + radius,
+        toX: isLeft ? x - radius : x + radius,
         fontSize,
         font,
         align: MetricDirection.VERTICAL,
-        arrowPosition: isRight ? ArrowPosition.LEFT : ArrowPosition.RIGHT,
+        arrowPosition: isLeft ? ArrowPosition.LEFT : ArrowPosition.RIGHT,
         scale
     })
 
