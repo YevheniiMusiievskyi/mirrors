@@ -29,6 +29,7 @@ export interface ArcMirrorCoordinates {
     clockwise: boolean;
     quarter: Quarter;
     scale: number;
+    cutForm: CutForm;
 }
 
 export interface ArcMirrorCorner {
@@ -56,4 +57,10 @@ export enum Quarter {
 export enum CutSide {
     LEFT,
     RIGHT
+}
+
+export enum CutForm {
+    HORIZONTAL_ARC,
+    VERTICAL_ARC,
+    SEMI_ARC
 }

@@ -2,26 +2,20 @@ import {
     ArrowPosition, HorizontalMetricLinesInput,
     MetricDirection,
     MetricLinesCoordinates,
-    MetricLinesInput,
     VerticalMetricLinesInput
 } from "../models/metric";
 import {CanvasTextMetrics} from "../models/circle";
 
-/*export function calculateMetricLines(metricsInput: MetricLinesInput): MetricLinesCoordinates {
-    return metricsInput.align === MetricDirection.VERTICAL
-        ? calculateVerticalAlignLines(metricsInput)
-        : calculateHorizontalAlignLines(metricsInput);
-}*/
+const marginCoeff: number = 0.1;
 
-export function calculateVerticalAlignLines(metricsInput: VerticalMetricLinesInput): MetricLinesCoordinates {
+export function calculateVerticalAlignLines(metricsInput: VerticalMetricLinesInput, radius: number): MetricLinesCoordinates {
     const x1 = metricsInput.x1;
     const y1 = metricsInput.y1;
     const x2 = metricsInput.x2;
     const y2 = metricsInput.y2;
     const isRight = metricsInput.arrowPosition === ArrowPosition.RIGHT
 
-    const toX = isRight ? metricsInput.toX * 1.1 : metricsInput.toX * 0.9
-
+    const toX = isRight ? metricsInput.toX + radius * marginCoeff : metricsInput.toX - radius * marginCoeff
 
     const arrowX1 = toX;
     const arrowY1 = y1;
@@ -56,15 +50,14 @@ export function calculateVerticalAlignLines(metricsInput: VerticalMetricLinesInp
     }
 }
 
-export function calculateHorizontalAlignLines(metricsInput: HorizontalMetricLinesInput): MetricLinesCoordinates {
+export function calculateHorizontalAlignLines(metricsInput: HorizontalMetricLinesInput, radius: number): MetricLinesCoordinates {
     const x1 = metricsInput.x1;
     const y1 = metricsInput.y1;
     const x2 = metricsInput.x2;
     const y2 = metricsInput.y2;
     const isUp = metricsInput.arrowPosition === ArrowPosition.UP;
 
-    const toY = isUp ? metricsInput.toY * 0.9 : metricsInput.toY * 1.1
-    // const toY = metricsInput.toY
+    const toY = isUp ? metricsInput.toY - radius * marginCoeff : metricsInput.toY + radius * marginCoeff
 
     const arrowX1 = x1;
     const arrowY1 = toY;

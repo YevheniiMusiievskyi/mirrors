@@ -4,7 +4,6 @@ import {calculateArcMirrorCoordinates, scaleCircleDimensions} from "../../helper
 import {
     ArcMirrorCoordinates,
     CircleCoordinates,
-    CircleDimensions,
     CutSide,
     Quarter
 } from "../../models/circle";
@@ -23,14 +22,6 @@ const x = 400;
 const y = 400;
 
 const circleCoordinates: CircleCoordinates = {x, y, radius}
-
-const circleDimensions: CircleDimensions = {
-    cutSide: CutSide.RIGHT,
-    diameter: 200,
-    width: 80,
-    upperHeight: 95,
-    lowerHeight: 50
-}
 
 const CircleMirror: React.FC<CircleMirrorProps> = ({
                                                        circleDimensions,
@@ -72,13 +63,13 @@ const CircleMirror: React.FC<CircleMirrorProps> = ({
             y1: upperArcMirrorCoordinates.y,
             x2: x2,
             y2: lowerArcMirrorCoordinates.y,
-            toX: isLeft ? Math.max(x1, x2) : Math.min(x1, x2),
+            toX: isLeft ? x + radius : x - radius,
             fontSize,
             font,
             align: MetricDirection.VERTICAL,
             arrowPosition: isLeft ? ArrowPosition.RIGHT : ArrowPosition.LEFT,
             scale
-        })
+        }, circleCoordinates.radius)
     }
 
     const diameterMetricsCoordinates = calculateVerticalAlignLines({
@@ -92,7 +83,7 @@ const CircleMirror: React.FC<CircleMirrorProps> = ({
         align: MetricDirection.VERTICAL,
         arrowPosition: isLeft ? ArrowPosition.LEFT : ArrowPosition.RIGHT,
         scale
-    })
+    }, circleCoordinates.radius)
 
     return (
         <div>
@@ -117,8 +108,6 @@ const CircleMirror: React.FC<CircleMirrorProps> = ({
                                     fontSize={fontSize}
                                 />
                             }
-                            {/*<Diameter circleCoordinates={circleCoordinates} />
-                    <Line points={[x, y, x - radius, y]} stroke="blue" strokeWidth={2} />*/}
                             <MetricLines metricLinesInput={diameterMetricsCoordinates}/>
                             {arcsDistanceMetrics &&
                                 <MetricLines metricLinesInput={arcsDistanceMetrics}/>
